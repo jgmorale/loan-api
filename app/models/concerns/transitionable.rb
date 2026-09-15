@@ -16,21 +16,11 @@ module Transitionable
     alias_method :transitionable_apply!, :apply!
 
     def validate_payment!(*args)
-      transitionable_validate_payment!(*args, false).tap do |result|
-        persist_transition! if result
-      end
+      transitionable_validate_payment!(*args, false).tap { |result| save! if result }
     end
 
     def apply!(*args)
-      transitionable_apply!(*args, false).tap do |result|
-        persist_transition! if result
-      end
+      transitionable_apply!(*args, false).tap { |result| save! if result }
     end
-  end
-
-  private
-
-  def persist_transition!
-    save!(validate: false)
   end
 end
