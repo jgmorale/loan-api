@@ -10,16 +10,6 @@ class PaymentApplicationsController < ApplicationController
     render json: { payment_application: payment_application_json(payment_application) }
   end
 
-  def update
-    payment_application = ApplyPayment.new.call(
-      loan_id: loan_id,
-      payment_id: payment_id,
-      amount: amount
-    )
-
-    render json: { payment_application: payment_application_json(payment_application) }
-  end
-
   private
 
   def loan_id
@@ -32,16 +22,6 @@ class PaymentApplicationsController < ApplicationController
     Integer(params[:payment_id], 10)
   rescue ArgumentError, TypeError
     raise ActionController::BadRequest, "payment_id must be an integer"
-  end
-
-  def amount
-    value = params.require(:amount)
-    amount = BigDecimal(value.to_s)
-    raise ActionController::BadRequest, "amount must be a number" unless amount.finite?
-
-    amount
-  rescue ArgumentError
-    raise ActionController::BadRequest, "amount must be a number"
   end
 
   def payment_application_json(payment_application)

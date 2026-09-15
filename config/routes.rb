@@ -9,6 +9,6 @@ Rails.application.routes.draw do
     resources :payment_applications,
               path: "payment-applications",
               param: :payment_id,
-              only: [:show, :update]
+              only: [:show]
   end
 end
