@@ -24,4 +24,10 @@ class PaymentCreatedListenerTest < ActiveSupport::TestCase
     assert_equal 300, loan.reload.total
     assert_equal 1, PaymentApplication.where(payment_id: payment.id).count
   end
+
+  test "#apply_payment resolves the memoized use case from the container" do
+    listener = PaymentCreatedListener.new
+
+    assert_same UseCaseContainer[:apply_payment], listener.send(:apply_payment)
+  end
 end

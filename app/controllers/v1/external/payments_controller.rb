@@ -2,7 +2,7 @@ module V1
   module External
     class PaymentsController < ApplicationController
       def create
-        payment, created = RegisterPayment.new.call(
+        payment, created = register_payment.call(
           folio_id: integer_param(:folio_id),
           loan_id: integer_param(:loan_id),
           amount: amount_param
@@ -12,6 +12,10 @@ module V1
       end
 
       private
+
+      def register_payment
+        UseCaseContainer[:register_payment]
+      end
 
       def integer_param(name)
         value = Integer(params.require(name).to_s, 10)

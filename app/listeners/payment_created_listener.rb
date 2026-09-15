@@ -8,7 +8,7 @@ class PaymentCreatedListener
       validate_payment!(payment, loan)
       payment.update!(status: "validated") if payment.status == "created"
 
-      ApplyPayment.new.call(
+      apply_payment.call(
         loan_id: payment.loan_id,
         payment_id: payment.id,
         amount: payment.amount
@@ -21,6 +21,10 @@ class PaymentCreatedListener
   end
 
   private
+
+  def apply_payment
+    UseCaseContainer[:apply_payment]
+  end
 
   def event_aggregate_id(event)
     return event.aggregate_id if event.respond_to?(:aggregate_id)
