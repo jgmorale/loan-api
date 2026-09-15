@@ -3,12 +3,14 @@ Rails.application.routes.draw do
     namespace :external do
       resources :payments, only: [:create]
     end
-  end
 
-  resources :loans, only: [:show] do
-    resources :payment_applications,
-              path: "payment-applications",
-              param: :payment_id,
-              only: [:show]
+    namespace :internal do
+      resources :loans, only: [:show] do
+      resources :payment_applications,
+                path: "payment-applications",
+                param: :payment_id,
+                only: [:show]
+      end
+    end
   end
 end

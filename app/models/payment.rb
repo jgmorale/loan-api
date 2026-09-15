@@ -1,5 +1,5 @@
 class Payment < ApplicationRecord
-  include Transitionable
+  include PaymentTransitionable
 
   belongs_to :loan
 

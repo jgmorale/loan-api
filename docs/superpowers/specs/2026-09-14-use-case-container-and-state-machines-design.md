@@ -92,7 +92,7 @@ del state machine:
 ```ruby
 payment.validate_payment! if payment.status == "created"
 apply_payment.call(loan_id: payment.loan_id, payment_id: payment.id, amount: payment.amount)
-payment.apply!
+payment.applied!
 ```
 
 ### 3. `LoanTransitionable` (Loan)
@@ -108,7 +108,7 @@ mismo evento `paid`, mismo comportamiento con `run_action: false` en
   `payment_created_listener_test.rb` deben seguir pasando sin cambios de
   comportamiento.
 - `test/models/payment_test.rb`: agregar casos para las transiciones
-  `validate_payment!` / `apply!` y que transiciones inválidas levanten error.
+  `validate_payment!` / `applied!` y que transiciones inválidas levanten error.
 - Nuevo test para `UseCaseContainer`: mismos objetos memoizados en llamadas
   sucesivas a `UseCaseContainer[:register_payment]` /
   `UseCaseContainer[:apply_payment]`.

@@ -23,10 +23,10 @@ class PaymentTest < ActiveSupport::TestCase
     loan = Loan.create!(total: 1_000, status: "loan")
     payment = Payment.create!(folio_id: 123, loan: loan, amount: 10, status: "created")
 
-    payment.validate_payment!
+    payment.validated!
     assert_equal "validated", payment.reload.status
 
-    payment.apply!
+    payment.applied!
     assert_equal "applied", payment.reload.status
   end
 
@@ -34,7 +34,7 @@ class PaymentTest < ActiveSupport::TestCase
     loan = Loan.create!(total: 1_000, status: "loan")
     payment = Payment.create!(folio_id: 123, loan: loan, amount: 10, status: "created")
 
-    assert_raises(StateMachines::InvalidTransition) { payment.apply! }
+    assert_raises(StateMachines::InvalidTransition) { payment.applied! }
     assert_equal "created", payment.reload.status
   end
 end

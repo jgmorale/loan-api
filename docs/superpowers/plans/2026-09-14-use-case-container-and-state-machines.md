@@ -249,7 +249,7 @@ git commit -m "refactor: resolve use cases from UseCaseContainer instead of .new
 
 **Interfaces:**
 - Consumes: nothing new (uses `state_machines-activerecord`, already in Gemfile).
-- Produces: `Payment#validate_payment!` (created → validated), `Payment#apply!` (validated → applied). Both raise `StateMachines::InvalidTransition` when the current state doesn't allow the transition.
+- Produces: `Payment#validate_payment!` (created → validated), `Payment#applied!` (validated → applied). Both raise `StateMachines::InvalidTransition` when the current state doesn't allow the transition.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -263,7 +263,7 @@ Append to `test/models/payment_test.rb` (inside `PaymentTest`):
     payment.validate_payment!
     assert_equal "validated", payment.reload.status
 
-    payment.apply!
+    payment.applied!
     assert_equal "applied", payment.reload.status
   end
 
@@ -271,7 +271,7 @@ Append to `test/models/payment_test.rb` (inside `PaymentTest`):
     loan = Loan.create!(total: 1_000, status: "loan")
     payment = Payment.create!(folio_id: 123, loan: loan, amount: 10, status: "created")
 
-    assert_raises(StateMachines::InvalidTransition) { payment.apply! }
+    assert_raises(StateMachines::InvalidTransition) { payment.applied! }
     assert_equal "created", payment.reload.status
   end
 ```
@@ -353,7 +353,7 @@ with:
         amount: payment.amount
       )
 
-      payment.apply!
+      payment.applied!
     end
 ```
 

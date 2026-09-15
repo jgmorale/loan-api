@@ -14,7 +14,7 @@ class PaymentCreatedListener
         amount: payment.amount
       )
 
-      payment.apply!
+      payment.applied!
     end
 
     payment.reload
