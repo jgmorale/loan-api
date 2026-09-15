@@ -6,7 +6,7 @@ class PaymentCreatedListener
     Payment.transaction do
       loan = payment.loan
       validate_payment!(payment, loan)
-      payment.update!(status: "validated") if payment.status == "created"
+      payment.validate_payment! if payment.status == "created"
 
       apply_payment.call(
         loan_id: payment.loan_id,
@@ -14,7 +14,7 @@ class PaymentCreatedListener
         amount: payment.amount
       )
 
-      payment.update!(status: "applied")
+      payment.apply!
     end
 
     payment.reload
