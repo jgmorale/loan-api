@@ -1,0 +1,2 @@
+class PaymentConflictError < StandardError
+end
