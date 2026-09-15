@@ -3,12 +3,12 @@ module PaymentTransitionable
 
   included do
     state_machine :status, initial: :created, use_transactions: false do
-      event :validated do
-        transition created: :validated
+      event :applied do
+        transition created: :applied
       end
 
-      event :applied do
-        transition validated: :applied
+      event :rejected do
+        transition created: :rejected
       end
     end
   end

@@ -4,17 +4,14 @@ class PaymentCreatedListener
     return payment if payment.status == "applied"
 
     Payment.transaction do
-      loan = payment.loan
-      validate_payment!(payment, loan)
-      payment.validate_payment! if payment.status == "created"
-
       apply_payment.call(
         loan_id: payment.loan_id,
         payment_id: payment.id,
         amount: payment.amount
       )
 
-      payment.applied!
+      payment.applied!(run_action: false)
+      payment.save!
     end
 
     payment.reload
@@ -30,10 +27,5 @@ class PaymentCreatedListener
     return event.aggregate_id if event.respond_to?(:aggregate_id)
 
     event.fetch("aggregate_id")
-  end
-
-  def validate_payment!(payment, loan)
-    raise InvalidAmountError, "Amount not valid" if payment.amount <= 0
-    raise InvalidAmountError, "Payment amount should be less than total amount" if loan.total < payment.amount
   end
 end
